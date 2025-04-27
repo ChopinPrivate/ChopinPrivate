@@ -10,22 +10,21 @@ function getParam(name, url){
 }
 
 function makeMusicPlayer(data){
-	let item, music_name;
+	let item, item_str;
 	
 	//URLパラメータを取得
 	item_str = getParam("itm");
 	item = parseInt(item_str);
-	
-	//曲名を取得
-	if (item>0 && item<=data.length) music_name = data[item-1]; //itemが範囲内のとき
-	else music_name = data[0]; //itemが範囲外のときは最初の曲名を取得
+	if (item<=0 || item>data.length) item = 1; //itemが範囲外のときは最初のアイテム番号を取得
 	
 	//タイトルを変更
-	document.title = "楽曲視聴｜" + music_name;
-	document.getElementById("h2_title").textContent = music_name;
+	console.log(item);
+	document.title = "楽曲視聴｜" + data[item-1].name;
+	document.getElementById("h2_title").textContent = data[item-1].name;
 	
 	//Audio設定の初期化
-	const audio = new Audio("https://chopinprivate.github.io/ChopinPrivate/music/" + music_name + ".m4a"); //oggファイルのパス
+	const audio_path = "https://chopinprivate.github.io/ChopinPrivate/music/" + data[item-1].name + "." + data[item-1].type;
+	const audio = new Audio(audio_path); //oggファイルのパス
 	audio.loop = true; //ループ再生有効
 	audio.preload = "auto"; //アクセス時のみ読込
 	let isPlaying = false; //アクセス時は停止中
@@ -86,6 +85,7 @@ function readJSON(){
 	//JSONの文字列をオブジェクトに変換
 	request.onload = function(){
 		let data_string = request.response;
+		console.log(data_string);
 		data = JSON.parse(data_string);
 		makeMusicPlayer(data); //読み込んだJSONをもとにミュージックプレイヤーを作成
 	}

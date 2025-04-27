@@ -4,7 +4,7 @@ function makeMusicList(data){
 	for (let i=0; i<data.length; i++){
 		let music_element = document.createElement("li");
 		let music_link = document.createElement("a");
-		music_link.innerText = data[i];
+		music_link.innerText = data[i].name;
 		console.log(i);
 		music_link.href = "music-listen.html?itm=" + String(i+1);
 		music_element.append(music_link);
