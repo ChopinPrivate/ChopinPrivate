@@ -25,7 +25,7 @@ function makeMusicPlayer(data){
 	document.getElementById("h2_title").textContent = music_name;
 	
 	//Audio設定の初期化
-	const audio = new Audio("https://chopinprivate.github.io/ChopinPrivate/music/" + music_name + ".ogg"); //oggファイルのパス
+	const audio = new Audio("https://chopinprivate.github.io/ChopinPrivate/music/" + music_name + ".m4a"); //oggファイルのパス
 	audio.loop = true; //ループ再生有効
 	audio.preload = "auto"; //アクセス時のみ読込
 	let isPlaying = false; //アクセス時は停止中
