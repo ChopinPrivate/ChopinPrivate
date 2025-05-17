@@ -1,0 +1,23 @@
+{
+	"music_single":[
+		{"ID":1, "name": "Quest", "type": "mp3"},
+		{"ID":2, "name": "机上行進曲「カオス座流星群の夜」", "type": "mp3"},
+		{"ID":3, "name": "Apollo", "type": "m4a"},
+		{"ID":4, "name": "パラマウント☆ショータイム！！", "type": "m4a"},
+		{"ID":5, "name": "skip&step", "type": "m4a"},
+		{"ID":6, "name": "桜火爛漫クレオパトラ", "type": "m4a"},
+		{"ID":7, "name": "I love you 私の君(BGMのみ)", "type": "m4a"},
+		{"ID":8, "name": "I love you 私の君(SEあり)", "type": "m4a"}
+	],
+	"music_plalist":[
+		{"ID":1, "name": "Quest", "type": "mp3"},
+		{"ID":2, "name": "机上行進曲「カオス座流星群の夜」", "type": "mp3"},
+		{"ID":3, "name": "Apollo", "type": "m4a"},
+		{"ID":4, "name": "I love you 私の君(BGMのみ)", "type": "m4a"},
+		{"ID":5, "name": "I love you 私の君(SEあり)", "type": "m4a"}
+	],
+	"platlist":[
+		{"ID":1, "name": "リミックス", "musics": [4,5]},
+		{"ID":2, "name": "作成予定", "musics": [1,2]}
+	]
+}
