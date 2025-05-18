@@ -137,19 +137,29 @@ function makeMusicPlayer(data){
     /*** playlist中の楽曲をプリロードし、callbackを呼ぶ関数 ***/
     function preloadAudios(playlist, callback) {
 		try{
+		document.getElementById(ERROR_MSG_ID).innerText += "pA-1\n";
 		let loaded = 0; //読み込み完了ファイル数
 
+		document.getElementById(ERROR_MSG_ID).innerText += "pA-2\n";
 		playlist.forEach((src, index) => { //プレイリスト内の楽曲を順に走査
+			document.getElementById(ERROR_MSG_ID).innerText += "pA-3\n";
 			const audio = new Audio(); //走査中の楽曲用のオーディオオブジェクト
+			document.getElementById(ERROR_MSG_ID).innerText += "pA-4\n";
 			audio.src = src; //楽曲ファイル
+			document.getElementById(ERROR_MSG_ID).innerText += "pA-5\n";
 			audio.preload = "auto"; //アクセス時にすべて読み込む
+			document.getElementById(ERROR_MSG_ID).innerText += "pA-6\n";
 			audio.addEventListener('canplaythrough', () => { //srcが読み込めたら
 				try{
+				document.getElementById(ERROR_MSG_ID).innerText += "pA-7\n";
 				audioBuffers[index] = audio; //オーディオオブジェクトを配列に追加し、
+				document.getElementById(ERROR_MSG_ID).innerText += "pA-8\n";
 				loaded++; //読み込み数をカウントアップ
+				document.getElementById(ERROR_MSG_ID).innerText += "pA-9\n";
 				if (loaded === playlist.length) { //すべて読み込めたら
+					document.getElementById(ERROR_MSG_ID).innerText += "pA-10\n";
 					callback(); //次の処理を進める（1つ目の楽曲ファイルを再生）
-					document.getElementById(ERROR_MSG_ID).innerText += "読み込み完了\n";
+					document.getElementById(ERROR_MSG_ID).innerText += "pA-11\n";
 				}
 		} catch(e){
 			document.getElementById(ERROR_MSG_ID).innerText += `エラー(playTrack): ${e.message}`;
