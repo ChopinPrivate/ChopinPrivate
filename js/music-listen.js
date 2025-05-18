@@ -141,9 +141,12 @@ function makeMusicPlayer(){
 
 	/*** トラック番号indexの楽曲ファイルを再生する関数 ***/
     function playTrack(index) {
-      const currentAudio = audioBuffers[index]; //現在のオーディオオブジェクト
+      console.log(playlist);
+	  const currentAudio = audioBuffers[index]; //現在のオーディオオブジェクト
       audioPlayer.src = currentAudio.src; //楽曲ファイルを更新
-      audioPlayer.play(); //再生
+      audioPlayer.play().catch((err) => { //再生
+		document.getElementById(ERROR_MSG_ID).innerText = "エラー:"+err;
+	  });
       currentTrack = index; //現在のトラック番号を更新
     }
 
