@@ -1,6 +1,7 @@
 /***** マクロ定義 *****/
 const JSON_NAME = "https://chopinprivate.github.io/ChopinPrivate/json/music.json"; //JSON名
 const LISTEN_HTML = "music-listen.html"; //視聴用HTML
+
 const MODE_PARAM = "mode"; //プレイヤーモードのパラメータ名
 const ITEM_PARAM = "itm"; //アイテムのパラメータ名
 const MODE_SINGLE = 's'; //単曲視聴の場合のプレイヤーモードのパラメータ

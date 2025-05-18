@@ -1,19 +1,24 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="./css/style.css">
   <title>音楽プレイヤー</title>
-</head>
-<body>
+  </head>
+  
+  <body>
+    <main>
       <h2 id="page_title">アイテム選択</h2>
 
-  <audio id="audio-player" controls></audio>
-
-  <div style="margin-top: 10px;">
-    <button id="rewind">⏪ 10秒戻る</button>
-    <button id="forward">⏩ 10秒進む</button>
-  </div>
-  <div id="error_msg"></div>
-  <script src="js/music-listen.js"></script>
-</body>
+      <audio id="audio-player" controls></audio>
+      <div style="margin-top: 10px;">
+        <button id="rewind">⏪ 10秒戻る</button>
+        <button id="forward">⏩ 10秒進む</button>
+      </div>
+      <div id="music_list"></div>
+      <div id="error_msg"></div>
+      <script src="js/music-listen.js"></script>
+    </main>
+  </body>
 </html>

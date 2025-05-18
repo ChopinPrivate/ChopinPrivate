@@ -1,6 +1,8 @@
 /***** マクロ定義 *****/
 const JSON_NAME = "https://chopinprivate.github.io/ChopinPrivate/json/music.json"; //JSON名
 const MODE_PARAM = "mode"; //プレイヤーモードのパラメータ名
+const MUSIC_FOLDER = "music"; //楽曲保存用フォルダ
+
 const ITEM_PARAM = "itm"; //アイテムのパラメータ名
 const MODE_SINGLE = 's'; //単曲視聴の場合のプレイヤーモードのパラメータ
 const MODE_LIST = 'l'; //プレイリストの場合のプレイヤーモードのパラメータ
@@ -85,7 +87,7 @@ function makeMusicPlayer(){
 		const msc_idx = getItemIndex(item, data[S_MUSIC_KEY]); //アイテムIDから楽曲インデックス値を取得
 		if (msc_idx != null){ //指定の楽曲が見つかれば
 			item_name = data[S_MUSIC_KEY][msc_idx].name; //アイテム名取得
-			playlist.push(item_name + "." + data[S_MUSIC_KEY][msc_idx].type); //楽曲ファイル名をプレイリストに追加
+			playlist.push(MUSIC_FOLDER + "/" + item_name + "." + data[S_MUSIC_KEY][msc_idx].type); //楽曲ファイル名をプレイリストに追加
 		}
 	}
 	
@@ -100,7 +102,7 @@ function makeMusicPlayer(){
 				if (msc_idx != null){ //指定の楽曲が見つかれば
 					const msc_name = data[P_MUSIC_KEY][msc_idx].name; //楽曲名取得
 					m_namelist.push(msc_name); //楽曲名をリストに追加
-					playlist.push(msc_name + "." + data[P_MUSIC_KEY][msc_idx].type); //楽曲ファイルをプレイリストに追加
+					playlist.push(MUSIC_FOLDER + "/" + msc_name + "." + data[P_MUSIC_KEY][msc_idx].type); //楽曲ファイルをプレイリストに追加
 				}
 			});
 		}
@@ -113,9 +115,11 @@ function makeMusicPlayer(){
 	}
 	
 	/*** タイトルの変更と楽曲リストの表示 ***/
-	console.log(PAGE_TITLE_ID);
 	document.title = "音楽プレイヤー｜" + item_name; //タイトル変更
 	document.getElementById(PAGE_TITLE_ID).innerText = item_name; //タイトルヘッダ変更
+	if (MODE_LIST){ //プレイリストの場合は楽曲リストも表示
+		
+	}
 	
     /*** playlist中の楽曲をプリロードし、callbackを呼ぶ関数 ***/
     function preloadAudios(playlist, callback) {
