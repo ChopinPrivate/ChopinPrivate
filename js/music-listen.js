@@ -21,6 +21,22 @@ const MODE_ERROR = 0; //プレイヤーモードの指定エラー
 const EMPTY_ERROR = 1; //アイテム未発見の指定エラー
 
 
+window.onerror = function (msg, src, lineno, colno, err){ //エラーがあった場合は表示
+	console.log("erer");
+	error_msg_elm = document.getElementById(ERROR_MSG_ID);
+	error_msg_elm.innerText += `グローバルエラー：${msg}`;
+	error_msg_elm.innerText += `ファイル：${src}, 行：${lineno}, 列：${colno}`;
+	error_msg_elm.innerText += `詳細：${err}`;
+}
+
+window.addEventListener('unhandledrejection', function (event) {
+	console.log("erer");
+	const error_msg_elm = document.getElementById(ERROR_MSG_ID);
+	error_msg_elm.innerText += "Promiseエラー: " + event.reason + "\n";
+	console.warn("Promiseの未処理エラー:", event.reason);
+});
+
+
 /***** URLパラメータを取得 *****/
 function getParam(name, url) {
     if (!url) url = window.location.href; //URLが指定されていない場合は現在のページのURL
@@ -40,7 +56,7 @@ function showErrorMsg(err){
 		"プレイヤーモードのパラメータが正しくありません。",
 		"楽曲またはプレイリストが見つかりませんでした。"
 	];
-	error_msg_elm.innerText = ErrorMsg[err]; //対応するエラー文を表示
+	error_msg_elm.innerText += ErrorMsg[err]; //対応するエラー文を表示
 }
 
 
@@ -56,7 +72,7 @@ function getItemIndex(i_id, data_i) {
 
 
 /***** 楽曲プレイヤーを作成 *****/
-function makeMusicPlayer(){
+function makeMusicPlayer(data){
     let currentTrack = 0; //現在のトラック番号
     const audioPlayer = document.getElementById(AUDIO_PLAYER_ID); //楽曲プレイヤー要素
     const rewindBtn = document.getElementById(REWIND_ID); //巻き戻しボタン要素
@@ -87,7 +103,7 @@ function makeMusicPlayer(){
 		const msc_idx = getItemIndex(item, data[S_MUSIC_KEY]); //アイテムIDから楽曲インデックス値を取得
 		if (msc_idx != null){ //指定の楽曲が見つかれば
 			item_name = data[S_MUSIC_KEY][msc_idx].name; //アイテム名取得
-			playlist.push(MUSIC_FOLDER + "/" + item_name + "." + data[S_MUSIC_KEY][msc_idx].type); //楽曲ファイル名をプレイリストに追加
+			playlist.push(`${MUSIC_FOLDER}/${item_name}.${data[S_MUSIC_KEY][msc_idx].type}`); //楽曲ファイル名をプレイリストに追加
 		}
 	}
 	
@@ -102,7 +118,7 @@ function makeMusicPlayer(){
 				if (msc_idx != null){ //指定の楽曲が見つかれば
 					const msc_name = data[P_MUSIC_KEY][msc_idx].name; //楽曲名取得
 					m_namelist.push(msc_name); //楽曲名をリストに追加
-					playlist.push(MUSIC_FOLDER + "/" + msc_name + "." + data[P_MUSIC_KEY][msc_idx].type); //楽曲ファイルをプレイリストに追加
+					playlist.push(`${MUSIC_FOLDER}/${msc_name}.${data[P_MUSIC_KEY][msc_idx].type}`); //楽曲ファイルをプレイリストに追加
 				}
 			});
 		}
@@ -115,60 +131,81 @@ function makeMusicPlayer(){
 	}
 	
 	/*** タイトルの変更と楽曲リストの表示 ***/
-	document.title = "音楽プレイヤー｜" + item_name; //タイトル変更
+	document.title = `音楽プレイヤー｜${item_name}`; //タイトル変更
 	document.getElementById(PAGE_TITLE_ID).innerText = item_name; //タイトルヘッダ変更
-	if (MODE_LIST){ //プレイリストの場合は楽曲リストも表示
-		
-	}
 	
     /*** playlist中の楽曲をプリロードし、callbackを呼ぶ関数 ***/
     function preloadAudios(playlist, callback) {
-      let loaded = 0; //読み込み完了ファイル数
+		try{
+		let loaded = 0; //読み込み完了ファイル数
 
-      playlist.forEach((src, index) => { //プレイリスト内の楽曲を順に走査
-        const audio = new Audio(); //走査中の楽曲用のオーディオオブジェクト
-        audio.src = src; //楽曲ファイル
-        audio.preload = "auto"; //アクセス時にすべて読み込む
-        audio.addEventListener('canplaythrough', () => { //srcが読み込めたら
-          audioBuffers[index] = audio; //オーディオオブジェクトを配列に追加し、
-          loaded++; //読み込み数をカウントアップ
-          if (loaded === playlist.length) { //すべて読み込めたら
-            callback(); //次の処理を進める（1つ目の楽曲ファイルを再生）
-          }
-        });
-      });
-    }
+		playlist.forEach((src, index) => { //プレイリスト内の楽曲を順に走査
+			const audio = new Audio(); //走査中の楽曲用のオーディオオブジェクト
+			audio.src = src; //楽曲ファイル
+			audio.preload = "auto"; //アクセス時にすべて読み込む
+			audio.addEventListener('canplaythrough', () => { //srcが読み込めたら
+				try{
+				audioBuffers[index] = audio; //オーディオオブジェクトを配列に追加し、
+				loaded++; //読み込み数をカウントアップ
+				if (loaded === playlist.length) { //すべて読み込めたら
+					callback(); //次の処理を進める（1つ目の楽曲ファイルを再生）
+				}
+		} catch(e){
+			document.getElementById(ERROR_MSG_ID).innerText += `エラー(playTrack): ${e.message}`;
+		}
+			});
+		});
+		} catch(e){
+			document.getElementById(ERROR_MSG_ID).innerText += `エラー(preloadAudios): ${e.message}`;
+		}
+	}
 
 	/*** トラック番号indexの楽曲ファイルを再生する関数 ***/
     function playTrack(index) {
-      console.log(playlist);
-	  const currentAudio = audioBuffers[index]; //現在のオーディオオブジェクト
-      audioPlayer.src = currentAudio.src; //楽曲ファイルを更新
-      audioPlayer.play().catch((err) => { //再生
-		document.getElementById(ERROR_MSG_ID).innerText = "エラー:"+err;
-	  });
-      currentTrack = index; //現在のトラック番号を更新
+		try{
+		const currentAudio = audioBuffers[index]; //現在のオーディオオブジェクト
+		audioPlayer.src = currentAudio.src; //楽曲ファイルを更新
+		audioPlayer.play().catch((e) => {
+			document.getElementById(ERROR_MSG_ID).innerText += `エラー(play): ${e.message}`;
+		});
+		currentTrack = index; //現在のトラック番号を更新
+		} catch(e){
+			console.log("erer");
+			document.getElementById(ERROR_MSG_ID).innerText += `エラー(playTrack): ${e.message}`;
+		}
     }
 
 	/*** 既存要素のイベント追加 ***/
 	//終了時のプレイヤー
     audioPlayer.addEventListener('ended', () => {
-      playTrack((currentTrack+1) % playlist.length); //次の楽曲を再生
+		try{
+		playTrack((currentTrack+1) % playlist.length); //次の楽曲を再生
+		} catch(e){
+			document.getElementById(ERROR_MSG_ID).innerText += `エラー(audioPlayer): ${e.message}`;
+		}
     });
 
     //10秒巻き戻し
     rewindBtn.addEventListener('click', () => {
-      audioPlayer.currentTime = Math.max(0, audioPlayer.currentTime - 10);
+		try{
+		audioPlayer.currentTime = Math.max(0, audioPlayer.currentTime - 10);
+		} catch(e){
+			document.getElementById(ERROR_MSG_ID).innerText += `エラー(rewindBtn): ${e.message}`;
+		}
     });
 
     //10秒先送り
     forwardBtn.addEventListener('click', () => {
-      audioPlayer.currentTime = Math.min(audioPlayer.duration, audioPlayer.currentTime + 10);
+		try{
+		audioPlayer.currentTime = Math.min(audioPlayer.duration, audioPlayer.currentTime + 10);
+		} catch(e){
+			document.getElementById(ERROR_MSG_ID).innerText += `エラー(forwardBtn): ${e.message}`;
+		}
     });
 	
 	/*** 楽曲をプリロードし、1つ目の楽曲ファイルを再生 ***/
     preloadAudios(playlist, () => {
-      playTrack(0);
+		playTrack(0);
     });
 }
 
@@ -185,10 +222,13 @@ function readJSON(){
 	request.onload = function(){ //読み込み完了時の動き
 		let data_string = request.response; //読み込み内容（文字列）
 		data = JSON.parse(data_string); //JSONとして解析
-		makeMusicPlayer(data); //読み込んだJSONをもとに楽曲プレイヤーを作成
+		try {
+			makeMusicPlayer(data); //読み込んだJSONをもとに楽曲プレイヤーを作成
+		} catch(err){
+			document.getElementById(ERROR_MSG_ID).innerText += `エラー：${err.message}`;
+		}
 	}
 }
 
-
 /***** ウィンドウを開いた際にJSONを読み込んだ後、楽曲プレイヤーを作成 ***/
-window.addEventListener("load", readJSON);
+window.addEventListener("load", readJSON); //JSON読み込み&プレイヤー作成

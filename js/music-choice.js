@@ -56,17 +56,17 @@ function makeListenList(data){
 	document.getElementById(PAGE_TITLE_ID).innerText = document.title; //タイトルヘッダ変更
 	
 	/*** 楽曲またはプレイリスト（視聴対象）一覧を表示 ***/
-	const listen_list_element = document.getElementById(LISTEN_LIST_ID); //視聴対象リスト要素
+	const listen_list_elm = document.getElementById(LISTEN_LIST_ID); //視聴対象リスト要素
 	const data_listen = //対応するJSONのkeyを読み込み
-		data[(mode=='s') ? S_MUSIC_KEY : PLAYLIST_KEY];
+		data[(mode==MODE_SINGLE) ? S_MUSIC_KEY : PLAYLIST_KEY];
 	data_listen.forEach((l) => { //視聴対象を順に走査
-		let listen_element = document.createElement("li"); //視聴対象要素
+		let listen_elm = document.createElement("li"); //視聴対象要素
 		let listen_link = document.createElement("a"); //視聴対象のリンク要素
 		listen_link.innerText = l.name; //楽曲名を追加
 		listen_link.href =  //URLを追加
-			LISTEN_HTML + "?" + MODE_PARAM +"=" + mode + "&" + ITEM_PARAM + "=" + l.ID;
-		listen_element.append(listen_link); //リンク要素を視聴対象要素に追加
-		listen_list_element.append(listen_element); //視聴対象要素をページに追加
+			`${LISTEN_HTML}?${MODE_PARAM}=${mode}&${ITEM_PARAM}=${l.ID}`;
+		listen_elm.append(listen_link); //リンク要素を視聴対象要素に追加
+		listen_list_elm.append(listen_elm); //視聴対象要素をページに追加
 	});
 }
 
@@ -87,4 +87,10 @@ function readJSON(){
 }
 
 /***** ウィンドウを開いた際にJSONを読み込んだ後、視聴リストを作成 ***/
-window.addEventListener("load", readJSON);
+window.onerror = function (msg, src, lineno, colno, err){ //エラーがあった場合は表示
+	error_msg_elm = document.getElementById(ERROR_MSG_ID);
+	error_msg_elm.innerText = `グローバルエラー：${msg}`;
+	error_msg_elm.innerText += `ファイル：${src}, 行：${lineno}, 列：${colno}`;
+	error_msg_elm.innerText += `詳細：${err}`;
+}
+window.addEventListener("load", readJSON); //JSON読み込み&リスト作成
