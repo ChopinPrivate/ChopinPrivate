@@ -149,6 +149,7 @@ function makeMusicPlayer(data){
 				loaded++; //読み込み数をカウントアップ
 				if (loaded === playlist.length) { //すべて読み込めたら
 					callback(); //次の処理を進める（1つ目の楽曲ファイルを再生）
+					document.getElementById(ERROR_MSG_ID).innerText += "読み込み完了\n";
 				}
 		} catch(e){
 			document.getElementById(ERROR_MSG_ID).innerText += `エラー(playTrack): ${e.message}`;
@@ -163,16 +164,22 @@ function makeMusicPlayer(data){
 	/*** トラック番号indexの楽曲ファイルを再生する関数 ***/
     function playTrack(index) {
 		try{
+		document.getElementById(ERROR_MSG_ID).innerText += "pT-1\n";
 		const currentAudio = audioBuffers[index]; //現在のオーディオオブジェクト
+		document.getElementById(ERROR_MSG_ID).innerText += "pT-2\n";
 		audioPlayer.src = currentAudio.src; //楽曲ファイルを更新
+		document.getElementById(ERROR_MSG_ID).innerText += "pT-3\n";
 		audioPlayer.play().catch((e) => {
 			document.getElementById(ERROR_MSG_ID).innerText += `エラー(play): ${e.message}`;
 		});
+		document.getElementById(ERROR_MSG_ID).innerText += "pT-4\n";
 		currentTrack = index; //現在のトラック番号を更新
+		document.getElementById(ERROR_MSG_ID).innerText += "pT-5\n";
 		} catch(e){
 			console.log("erer");
 			document.getElementById(ERROR_MSG_ID).innerText += `エラー(playTrack): ${e.message}`;
 		}
+		document.getElementById(ERROR_MSG_ID).innerText += "pT-6\n";
     }
 
 	/*** 既存要素のイベント追加 ***/
@@ -205,6 +212,7 @@ function makeMusicPlayer(data){
 	
 	/*** 楽曲をプリロードし、1つ目の楽曲ファイルを再生 ***/
     preloadAudios(playlist, () => {
+		document.getElementById(ERROR_MSG_ID).innerText += "will call playTrack(0)\n";
 		playTrack(0);
     });
 }
