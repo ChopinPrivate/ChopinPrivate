@@ -10,14 +10,26 @@
 		{"ID":8, "name": "I love you 私の君(SEあり)", "type": "m4a"}
 	],
 	"playlist_music":[
-		{"ID":1, "name": "Quest", "type": "mp3"},
-		{"ID":2, "name": "机上行進曲「カオス座流星群の夜」", "type": "mp3"},
-		{"ID":3, "name": "Apollo", "type": "m4a"},
-		{"ID":4, "name": "I love you 私の君(BGMのみ)", "type": "m4a"},
-		{"ID":5, "name": "I love you 私の君(SEあり)", "type": "m4a"}
+		{"ID": 1, "name": "祝福の色彩は想い結ぶ君たち迄", "type": "m4a"},
+		{"ID": 2, "name": "夜櫻ブレヰダアズ", "type": "m4a"},
+		{"ID": 3, "name": "春竜 ～Haryu～", "type": "m4a"},
+		{"ID": 4, "name": "桜火爛漫クレオパトラ", "type": "m4a"},
+		{"ID": 5, "name": "春遊 ～happy excursion～", "type": "m4a"},
+		{"ID": 6, "name": "そつおめしき・ふる", "type": "m4a"},
+		{"ID": 7, "name": "リミックス7（リズム天国ゴールド）", "type": "m4a"},
+		{"ID": 8, "name": "Aloft in the wind", "type": "m4a"},
+		{"ID": 9, "name": "潮騒205号SSS線", "type": "mp3"},
+		{"ID":10, "name": "Surf Zapping", "type": "m4a"},
+		{"ID":11, "name": "Goldfish City", "type": "m4a"},
+		{"ID":12, "name": "星の透る夏空に願う", "type": "m4a"},
+		{"ID":13, "name": "星河一天", "type": "m4a"},
+		{"ID":14, "name": "コーラスメン2", "type": "m4a"},
+		{"ID":15, "name": "夏竜 ～Karyu～", "type": "m4a"},
+		{"ID":16, "name": "けけボレロ", "type": "m4a"}
 	],
 	"playlist":[
-		{"ID":1, "name": "リミックス", "musics": [4,5]},
-		{"ID":2, "name": "作成予定", "musics": [1,2]}
+		{"ID":1, "name": "春プレイリスト", "musics": [1,2,3,7,8,4,5,6]},
+		{"ID":2, "name": "夏プレイリスト", "musics": [9,10,11,12,7,13,8,14,15,16]},
+		{"ID":3, "name": "春-夏プレイリスト", "musics": [9,10,11,1,12,2,3,7,8,13,14,4,5,6,15,16]
 	]
 }
