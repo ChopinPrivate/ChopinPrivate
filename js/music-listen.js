@@ -149,7 +149,7 @@ function makeMusicPlayer(data){
 			document.getElementById(ERROR_MSG_ID).innerText += "pA-5\n";
 			audio.preload = "auto"; //アクセス時にすべて読み込む
 			document.getElementById(ERROR_MSG_ID).innerText += "pA-6\n";
-			audio.addEventListener('canplaythrough', () => { //srcが読み込めたら
+			audio.addEventListener('canplay', () => { //srcが読み込めたら
 				try{
 				document.getElementById(ERROR_MSG_ID).innerText += "pA-7\n";
 				audioBuffers[index] = audio; //オーディオオブジェクトを配列に追加し、
