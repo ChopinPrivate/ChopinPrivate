@@ -22,7 +22,6 @@ const EMPTY_ERROR = 1; //アイテム未発見の指定エラー
 
 
 window.onerror = function (msg, src, lineno, colno, err){ //エラーがあった場合は表示
-	console.log("erer");
 	error_msg_elm = document.getElementById(ERROR_MSG_ID);
 	error_msg_elm.innerText += `グローバルエラー：${msg}`;
 	error_msg_elm.innerText += `ファイル：${src}, 行：${lineno}, 列：${colno}`;
@@ -30,7 +29,6 @@ window.onerror = function (msg, src, lineno, colno, err){ //エラーがあっ�
 }
 
 window.addEventListener('unhandledrejection', function (event) {
-	console.log("erer");
 	const error_msg_elm = document.getElementById(ERROR_MSG_ID);
 	error_msg_elm.innerText += "Promiseエラー: " + event.reason + "\n";
 	console.warn("Promiseの未処理エラー:", event.reason);
@@ -136,95 +134,49 @@ function makeMusicPlayer(data){
 	
     /*** playlist中の楽曲をプリロードし、callbackを呼ぶ関数 ***/
     function preloadAudios(playlist, callback) {
-		try{
-		document.getElementById(ERROR_MSG_ID).innerText += "pA-1\n";
 		let loaded = 0; //読み込み完了ファイル数
 
-		document.getElementById(ERROR_MSG_ID).innerText += "pA-2\n";
 		playlist.forEach((src, index) => { //プレイリスト内の楽曲を順に走査
-			document.getElementById(ERROR_MSG_ID).innerText += "pA-3\n";
 			const audio = new Audio(); //走査中の楽曲用のオーディオオブジェクト
-			document.getElementById(ERROR_MSG_ID).innerText += "pA-4\n";
 			audio.src = src; //楽曲ファイル
-			document.getElementById(ERROR_MSG_ID).innerText += "pA-5-1\n";
 			audio.load(); //楽曲ファイルをロード（iOSにおけるcanplay発火対策）
-			document.getElementById(ERROR_MSG_ID).innerText += "pA-5-2\n";
 			audio.preload = "auto"; //アクセス時にすべて読み込む
-			document.getElementById(ERROR_MSG_ID).innerText += "pA-6\n";
 			audio.addEventListener('canplay', () => { //srcが読み込めたら
-				try{
-				document.getElementById(ERROR_MSG_ID).innerText += "pA-7\n";
 				audioBuffers[index] = audio; //オーディオオブジェクトを配列に追加し、
-				document.getElementById(ERROR_MSG_ID).innerText += "pA-8\n";
 				loaded++; //読み込み数をカウントアップ
-				document.getElementById(ERROR_MSG_ID).innerText += "pA-9\n";
 				if (loaded === playlist.length) { //すべて読み込めたら
-					document.getElementById(ERROR_MSG_ID).innerText += "pA-10\n";
 					callback(); //次の処理を進める（1つ目の楽曲ファイルを再生）
-					document.getElementById(ERROR_MSG_ID).innerText += "pA-11\n";
 				}
-		} catch(e){
-			document.getElementById(ERROR_MSG_ID).innerText += `エラー(playTrack): ${e.message}`;
-		}
 			});
 		});
-		} catch(e){
-			document.getElementById(ERROR_MSG_ID).innerText += `エラー(preloadAudios): ${e.message}`;
-		}
 	}
 
 	/*** トラック番号indexの楽曲ファイルを再生する関数 ***/
     function playTrack(index) {
-		try{
-		document.getElementById(ERROR_MSG_ID).innerText += "pT-1\n";
 		const currentAudio = audioBuffers[index]; //現在のオーディオオブジェクト
-		document.getElementById(ERROR_MSG_ID).innerText += "pT-2\n";
 		audioPlayer.src = currentAudio.src; //楽曲ファイルを更新
-		document.getElementById(ERROR_MSG_ID).innerText += "pT-3\n";
-		audioPlayer.play().catch((e) => {
-			document.getElementById(ERROR_MSG_ID).innerText += `エラー(play): ${e.message}`;
-		});
-		document.getElementById(ERROR_MSG_ID).innerText += "pT-4\n";
+		audioPlayer.play();
 		currentTrack = index; //現在のトラック番号を更新
-		document.getElementById(ERROR_MSG_ID).innerText += "pT-5\n";
-		} catch(e){
-			console.log("erer");
-			document.getElementById(ERROR_MSG_ID).innerText += `エラー(playTrack): ${e.message}`;
-		}
-		document.getElementById(ERROR_MSG_ID).innerText += "pT-6\n";
     }
 
 	/*** 既存要素のイベント追加 ***/
 	//終了時のプレイヤー
     audioPlayer.addEventListener('ended', () => {
-		try{
 		playTrack((currentTrack+1) % playlist.length); //次の楽曲を再生
-		} catch(e){
-			document.getElementById(ERROR_MSG_ID).innerText += `エラー(audioPlayer): ${e.message}`;
-		}
     });
 
     //10秒巻き戻し
     rewindBtn.addEventListener('click', () => {
-		try{
 		audioPlayer.currentTime = Math.max(0, audioPlayer.currentTime - 10);
-		} catch(e){
-			document.getElementById(ERROR_MSG_ID).innerText += `エラー(rewindBtn): ${e.message}`;
-		}
     });
 
     //10秒先送り
     forwardBtn.addEventListener('click', () => {
-		try{
 		audioPlayer.currentTime = Math.min(audioPlayer.duration, audioPlayer.currentTime + 10);
-		} catch(e){
-			document.getElementById(ERROR_MSG_ID).innerText += `エラー(forwardBtn): ${e.message}`;
-		}
     });
 	
 	/*** 楽曲をプリロードし、1つ目の楽曲ファイルを再生 ***/
     preloadAudios(playlist, () => {
-		document.getElementById(ERROR_MSG_ID).innerText += "will call playTrack(0)\n";
 		playTrack(0);
     });
 }
@@ -242,11 +194,7 @@ function readJSON(){
 	request.onload = function(){ //読み込み完了時の動き
 		let data_string = request.response; //読み込み内容（文字列）
 		data = JSON.parse(data_string); //JSONとして解析
-		try {
-			makeMusicPlayer(data); //読み込んだJSONをもとに楽曲プレイヤーを作成
-		} catch(err){
-			document.getElementById(ERROR_MSG_ID).innerText += `エラー：${err.message}`;
-		}
+		makeMusicPlayer(data); //読み込んだJSONをもとに楽曲プレイヤーを作成
 	}
 }
 
