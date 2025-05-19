@@ -146,7 +146,9 @@ function makeMusicPlayer(data){
 			const audio = new Audio(); //走査中の楽曲用のオーディオオブジェクト
 			document.getElementById(ERROR_MSG_ID).innerText += "pA-4\n";
 			audio.src = src; //楽曲ファイル
-			document.getElementById(ERROR_MSG_ID).innerText += "pA-5\n";
+			document.getElementById(ERROR_MSG_ID).innerText += "pA-5-1\n";
+			audio.load(); //楽曲ファイルをロード（iOSにおけるcanplay発火対策）
+			document.getElementById(ERROR_MSG_ID).innerText += "pA-5-2\n";
 			audio.preload = "auto"; //アクセス時にすべて読み込む
 			document.getElementById(ERROR_MSG_ID).innerText += "pA-6\n";
 			audio.addEventListener('canplay', () => { //srcが読み込めたら
